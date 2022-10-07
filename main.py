@@ -10,8 +10,6 @@ class Petition:
     response: bool
     updates: bool
     in_progress: bool
-    deleted: bool
-    status: int
     title: str
     author: str
     tags: list
@@ -30,7 +28,7 @@ headers = json.dumps({
     'Origin': 'https://pawprints.rit.edu',
     'Pragma': 'no-cache',
     'Sec-WebSocket-Extensions': 'permessage-deflate; client_max_window_bits',
-    'Sec-WebSocket-Key': 'bYbaIZLH7/k2NAhz56kWw==',
+    'Sec-WebSocket-Key': 'https://github.com/Carter4242/Pawprints-Webscraper',
     'Sec-WebSocket-Version': '13',
     'Upgrade': 'websocket',
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36'
@@ -41,8 +39,8 @@ headers = json.dumps({
 # Perform the handshake.
 ws = create_connection('wss://pawprints.rit.edu/ws/',headers=headers)
 # ws.send(json.dumps({"command": "get", "id": 7}))
-# ws.send(json.dumps({"command":"paginate","sort":"most recent","filter":"all","page":1}))
-ws.send(json.dumps({"command":"all"}))
+ws.send(json.dumps({"command":"paginate","sort":"most recent","filter":"all","page":1}))
+# ws.send(json.dumps({"command":"all"}))
 
 print("\nReciving paginate")
 result = ws.recv()
@@ -55,33 +53,27 @@ print("Loading json")
 data = json.loads(result)
 print ("Length of data: " + str(len(data)))
 
-# print(type(data[0]))
-# print(data[0].values())
-
 print("\nLoading Petitions List")
 petitions = []
 for i in data:
-    date1 = datetime.strptime(i['timestamp'],'%B %d, %Y')
-    date2 = datetime.strptime(i['expires'],'%B %d, %Y')
-    update = False
+    made = datetime.strptime(i['timestamp'],'%B %d, %Y')
+    expired = datetime.strptime(i['expires'],'%B %d, %Y')
+    updated = False
     responded = bool(i['response'])
-    if i['updates'] != "[]":
+    if i['updates'] != []:
         updated = True
         responded = True
-        
     petitions.append(Petition(
         id=int(i['id']),
         signatures=int(i['signatures']),
         response=responded,
         updates=updated,
         in_progress=bool(i['in_progress']),
-        deleted=bool(i['deleted']),
-        status=int(i['status']),
         title=i["title"],
         author=i['author'],
         tags=i['tags'],
-        timestamp= date1,
-        expires= date2
+        timestamp= made,
+        expires= expired
         ))
 
 print("Finished Loading Petitions List")
