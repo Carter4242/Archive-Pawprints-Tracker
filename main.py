@@ -37,19 +37,16 @@ headers = json.dumps({
 
 def mostFrequentAuthor(List):
     authors = []
-
     for i in List:
         authors.append(i.author)
     
     counter = 0
     num = authors[0]
-     
     for i in authors:
         curr_frequency = authors.count(i)
         if(curr_frequency > counter):
             counter = curr_frequency
             num = i
- 
     return num
 
 # Launch the connection to the server.
