@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime, date
 from websocket import create_connection
+from statistics import mode 
 import json
 
 @dataclass
@@ -9,7 +10,7 @@ class Petition:
     signatures: int
     response: bool
     updates: bool
-    in_progress: bool
+    charged: bool
     title: str
     author: str
     tags: list
@@ -34,13 +35,29 @@ headers = json.dumps({
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36'
 })
 
+def mostFrequentAuthor(List):
+    authors = []
+
+    for i in List:
+        authors.append(i.author)
+    
+    counter = 0
+    num = authors[0]
+     
+    for i in authors:
+        curr_frequency = authors.count(i)
+        if(curr_frequency > counter):
+            counter = curr_frequency
+            num = i
+ 
+    return num
 
 # Launch the connection to the server.
 # Perform the handshake.
-ws = create_connection('wss://pawprints.rit.edu/ws/',headers=headers)
 # ws.send(json.dumps({"command": "get", "id": 7}))
-ws.send(json.dumps({"command":"paginate","sort":"most recent","filter":"all","page":1}))
-# ws.send(json.dumps({"command":"all"}))
+ws = create_connection('wss://pawprints.rit.edu/ws/',headers=headers)
+# ws.send(json.dumps({"command":"paginate","sort":"most recent","filter":"all","page":1}))
+ws.send(json.dumps({"command":"all"}))
 
 print("\nReciving paginate")
 result = ws.recv()
@@ -68,7 +85,7 @@ for i in data:
         signatures=int(i['signatures']),
         response=responded,
         updates=updated,
-        in_progress=bool(i['in_progress']),
+        charged=bool(i['in_progress']),
         title=i["title"],
         author=i['author'],
         tags=i['tags'],
@@ -79,8 +96,10 @@ for i in data:
 print("Finished Loading Petitions List")
 print("Length of petitions: " + str(len(petitions)))
 
-print("\nSorting by most Sigs")
+print("\nSorting...")
 petitions.sort(key = lambda x: x.signatures, reverse = True)
+petitions.sort(key = lambda x: x.response, reverse = True)
+print("Most frequent author:", mostFrequentAuthor(petitions))
 
 filename = "Output/" + str(datetime.now()) + " - Length: " + str(len(petitions)) + ".txt"
 print("\nOpening "+filename)
