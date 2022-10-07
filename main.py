@@ -6,17 +6,18 @@ import json
 @dataclass
 class Petition:
     id: int
-    title: str
     signatures: int
-    author: str
-    tags: list
     response: bool
-    updates: list
-    timestamp: date
-    expires: date
-    status: int
+    updates: bool
     in_progress: bool
     deleted: bool
+    status: int
+    title: str
+    author: str
+    tags: list
+    timestamp: date
+    expires: date
+
 
 
 # From web browser
@@ -39,16 +40,14 @@ headers = json.dumps({
 # Launch the connection to the server.
 # Perform the handshake.
 ws = create_connection('wss://pawprints.rit.edu/ws/',headers=headers)
-ws.send(json.dumps({"command":"paginate","sort":"most recent","filter":"all","page":1}))
-# ws.send(json.dumps({"command":"all"}))
 # ws.send(json.dumps({"command": "get", "id": 7}))
-# Printing all the result
-
+# ws.send(json.dumps({"command":"paginate","sort":"most recent","filter":"all","page":1}))
+ws.send(json.dumps({"command":"all"}))
 
 print("\nReciving paginate")
 result = ws.recv()
 print("Reciving all")
-# result = ws.recv()
+result = ws.recv()
 
 print("\nRemoving header")
 result = result[14:result.find(', \"map\": {')]
@@ -64,22 +63,32 @@ petitions = []
 for i in data:
     date1 = datetime.strptime(i['timestamp'],'%B %d, %Y')
     date2 = datetime.strptime(i['expires'],'%B %d, %Y')
-    petitions.append((Petition(
+    update = False
+    responded = bool(i['response'])
+    if i['updates'] != "[]":
+        updated = True
+        responded = True
+        
+    petitions.append(Petition(
         id=int(i['id']),
-        title=i["title"],
         signatures=int(i['signatures']),
+        response=responded,
+        updates=updated,
+        in_progress=bool(i['in_progress']),
+        deleted=bool(i['deleted']),
+        status=int(i['status']),
+        title=i["title"],
         author=i['author'],
         tags=i['tags'],
-        response=bool(i['response']),
-        updates=list(i['updates']),
         timestamp= date1,
-        expires= date2,
-        status=int(i['status']),
-        in_progress=bool(i['in_progress']),
-        deleted=bool(i['deleted']))))
+        expires= date2
+        ))
 
 print("Finished Loading Petitions List")
 print("Length of petitions: " + str(len(petitions)))
+
+print("\nSorting by most Sigs")
+petitions.sort(key = lambda x: x.signatures, reverse = True)
 
 filename = "Output/" + str(datetime.now()) + " - Length: " + str(len(petitions)) + ".txt"
 print("\nOpening "+filename)
