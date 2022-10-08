@@ -33,7 +33,7 @@ headers = json.dumps({
     'Sec-WebSocket-Key': 'https://github.com/Carter4242/Pawprints-Webscraper',
     'Sec-WebSocket-Version': '13',
     'Upgrade': 'websocket',
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36'
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
 })
 
 def mostFrequentAuthor(List):
@@ -102,7 +102,6 @@ petitions.sort(key = lambda x: x.response, reverse = True)
 petitions.sort(key = lambda x: x.timestamp)
 
 sixMonthsAgo = date.today() - relativedelta(months=+6)
-
 for i in petitions:
     if i.response == False:
             if i.signatures >= 200 and i.timestamp < sixMonthsAgo:
@@ -110,7 +109,7 @@ for i in petitions:
                 pass
 
 
-graphing.buildTimeGraph(petitions)
+# graphing.buildTimeGraph(petitions)
 
 
 filename = "Output/" + str(datetime.now()) + " - Length: " + str(len(petitions)) + ".txt"
@@ -121,3 +120,22 @@ with open(filename, 'a') as f:
         f.write(str(i))
         f.write("\n")
 print(filename +" written\n")
+
+lastLine = ""
+
+with open('DailySignatures/signatureTotals.txt') as f:
+    for line in f:
+        lastLine = line
+
+lastLine = lastLine.split()
+
+if lastLine[0] != str(date.today()):
+    print("Printing Today's Total Sigs\n")
+    totalSigs = 0
+    for p in petitions:
+        totalSigs += p.signatures
+    
+    with open('DailySignatures/signatureTotals.txt', 'a') as f:
+        f.write('\n')
+        f.write(str(date.today()) + ' ' + str(totalSigs))
+
