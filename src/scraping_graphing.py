@@ -1,6 +1,24 @@
+"""
+PAWPRINTS-WEBSCRAPER
+
+This module handles the creation of graphs using the petitions data.
+
+Author: Carter4242
+https://github.com/Carter4242
+"""
+
+
 import matplotlib.pyplot as plt
 
-def buildTimeGraph(petitions):
+
+def buildTimeGraph(petitions: list) -> None:
+    """
+    Bit of a mess right now, will sort out later.
+
+    :param petitions: Full list of petitions
+    :type petitions: list
+    :rtype: None
+    """    
     yearMonthsList = []
     for p in petitions:
         dateStr = str(p.timestamp.month) + r"/" + str(p.timestamp.year)
@@ -102,5 +120,3 @@ def buildTimeGraph(petitions):
     plt.tight_layout(pad=0.5)
 
     plt.show()"""
-
-
