@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 from datetime import datetime, date
 from websocket import create_connection
-from statistics import mode 
+from dateutil.relativedelta import relativedelta
 import json
+import graphing
+
 
 @dataclass
 class Petition:
@@ -11,12 +13,11 @@ class Petition:
     response: bool
     updates: bool
     charged: bool
+    timestamp: date
+    expires: date
     title: str
     author: str
     tags: list
-    timestamp: date
-    expires: date
-
 
 
 # From web browser
@@ -52,13 +53,14 @@ def mostFrequentAuthor(List):
 # Launch the connection to the server.
 # Perform the handshake.
 # ws.send(json.dumps({"command": "get", "id": 7}))
-ws = create_connection('wss://pawprints.rit.edu/ws/',headers=headers)
-# ws.send(json.dumps({"command":"paginate","sort":"most recent","filter":"all","page":1}))
+print("\nCreating Connection")
+ws = create_connection('wss://pawprints.rit.edu/ws/', headers=headers)
+#ws.send(json.dumps({"command":"paginate","sort":"most recent","filter":"all","page":1}))
 ws.send(json.dumps({"command":"all"}))
 
-print("\nReciving paginate")
+print("\nReceiving paginate")
 result = ws.recv()
-print("Reciving all")
+print("Receiving all")
 result = ws.recv()
 
 print("\nRemoving header")
@@ -70,8 +72,8 @@ print ("Length of data: " + str(len(data)))
 print("\nLoading Petitions List")
 petitions = []
 for i in data:
-    made = datetime.strptime(i['timestamp'],'%B %d, %Y')
-    expired = datetime.strptime(i['expires'],'%B %d, %Y')
+    made = datetime.date(datetime.strptime(i['timestamp'],'%B %d, %Y'))
+    expired = datetime.date(datetime.strptime(i['expires'],'%B %d, %Y'))
     updated = False
     responded = bool(i['response'])
     if i['updates'] != []:
@@ -83,11 +85,11 @@ for i in data:
         response=responded,
         updates=updated,
         charged=bool(i['in_progress']),
+        timestamp= made,
+        expires= expired,
         title=i["title"],
         author=i['author'],
         tags=i['tags'],
-        timestamp= made,
-        expires= expired
         ))
 
 print("Finished Loading Petitions List")
@@ -96,7 +98,20 @@ print("Length of petitions: " + str(len(petitions)))
 print("\nSorting...")
 petitions.sort(key = lambda x: x.signatures, reverse = True)
 petitions.sort(key = lambda x: x.response, reverse = True)
-print("Most frequent author:", mostFrequentAuthor(petitions))
+# print("Most frequent author:", mostFrequentAuthor(petitions))
+petitions.sort(key = lambda x: x.timestamp)
+
+sixMonthsAgo = date.today() - relativedelta(months=+6)
+
+for i in petitions:
+    if i.response == False:
+            if i.signatures >= 200 and i.timestamp < sixMonthsAgo:
+                # print(i)
+                pass
+
+
+graphing.buildTimeGraph(petitions)
+
 
 filename = "Output/" + str(datetime.now()) + " - Length: " + str(len(petitions)) + ".txt"
 print("\nOpening "+filename)
