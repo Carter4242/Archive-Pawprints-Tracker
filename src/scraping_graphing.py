@@ -110,7 +110,7 @@ def buildTimeGraph(petitions: list) -> None:
     plt.margins(0.005, tight=True)
     plt.tight_layout(pad=0.5)
 
-    plt.show()
+    plt.savefig('graphs/petitionsGraph.svg')
 
     """plt.bar(xAxis, yValues, tick_label = xValues, width = 0.8)
     plt.xticks(fontsize=8)

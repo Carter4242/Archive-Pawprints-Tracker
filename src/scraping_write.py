@@ -22,7 +22,7 @@ def writeToFile(petitions: list) -> None:
     """
 
     # YYYY-MM-DD HR:MM:SS:DECMAL
-    filename = "Output/" + str(datetime.now()) + " - Length: " + str(len(petitions)) + ".txt"
+    filename = "output/" + str(datetime.now()) + " - Length: " + str(len(petitions)) + ".txt"
 
     print("\nOpening "+filename)
     with open(filename, 'a') as f:  # Appending
@@ -46,7 +46,7 @@ def totalSigsWrite(petitions: list) -> None:
     :rtype: None
     """
     lastLine = ""
-    with open('DailySignatures/signatureTotals.txt', 'r') as f:  # Reading contents
+    with open('dailySignatures/signatureTotals.txt', 'r') as f:  # Reading contents
         for line in f:
             lastLine = line  # Will end with this as the actual last line.
 
@@ -58,6 +58,6 @@ def totalSigsWrite(petitions: list) -> None:
         for p in petitions:
             totalSigs += p.signatures
         
-        with open('DailySignatures/signatureTotals.txt', 'a') as f:  # Appending
+        with open('dailySignatures/signatureTotals.txt', 'a') as f:  # Appending
             f.write('\n')
             f.write(str(date.today()) + ' ' + str(totalSigs))
