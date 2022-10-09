@@ -27,6 +27,10 @@ pyparsing==3.0.9
     #   matplotlib
     #   packaging
 python-dateutil==2.8.2
-    # via matplotlib
+    # via
+    #   -r requirements.in
+    #   matplotlib
 six==1.16.0
     # via python-dateutil
+websocket-client==1.4.1
+    # via -r requirements.in

@@ -10,7 +10,7 @@ https://github.com/Carter4242
 
 
 from dateutil.relativedelta import relativedelta
-from datetime import datetime, date
+from datetime import date
 
 
 def mostFrequentAuthor(petitions: list) -> str:
