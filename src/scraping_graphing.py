@@ -95,7 +95,8 @@ def buildTimeGraph(petitions: list) -> None:
     for i in range(len(yValuesSigsOverCharged)):
         xIgnoreList.append(yValuesSigsOverCharged[i] + yValuesResponded[i] + yValuesSigsOverNotCharged[i])
 
-    
+
+    plt.figure(figsize=(12, 9), dpi=80)
     plt.bar(xValues, yValuesSigsOverNotCharged, 0.8, color = ['red'], label='Not Responded ≥ 200 Signatures + Not Charged')
     plt.bar(xValues, yValuesSigsOverCharged, 0.8, bottom=yValuesSigsOverNotCharged, color = ['orange'], label='Not Responded ≥ 200 Signatures + Charged')
     plt.bar(xValues, yValuesResponded, 0.8, bottom=xRespondedList, color = ['green'], label='Responded')
@@ -109,6 +110,7 @@ def buildTimeGraph(petitions: list) -> None:
 
     plt.margins(0.005, tight=True)
     plt.tight_layout(pad=0.5)
+
 
     plt.savefig('graphs/petitionsGraph.svg')
 

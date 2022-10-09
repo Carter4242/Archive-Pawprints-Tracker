@@ -47,8 +47,8 @@ def scrapeAll () -> list:
     ws = create_connection('wss://pawprints.rit.edu/ws/', headers=headers)
 
     # ws.send(json.dumps({"command": "get", "id": 7})) - Unused
-    # ws.send(json.dumps({"command":"paginate","sort":"most recent","filter":"all","page":1})) - Just 1 page
-    ws.send(json.dumps({"command":"all"}))
+    #ws.send(json.dumps({"command":"paginate","sort":"most recent","filter":"all","page":1}))  # - Just 1 page (~33)
+    ws.send(json.dumps({"command":"all"}))  # - All (~2500+)
 
     print("\nReceiving paginate")
     ws.recv()  # paginate
