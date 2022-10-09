@@ -10,7 +10,7 @@ https://github.com/Carter4242
 
 
 from dateutil.relativedelta import relativedelta
-from datetime import date
+from datetime import datetime
 
 
 def mostFrequentAuthor(petitions: list) -> str:
@@ -71,7 +71,7 @@ def noResponseSixMonths(petitions: list) -> list:
     :rtype: list
     """
 
-    sixMonthsAgo = date.today() - relativedelta(months=+6)
+    sixMonthsAgo = datetime.utcnow().date() - relativedelta(months=+6)
     noResponse = []
     for i in petitions:
         if i.response == False and i.signatures >= 200 and i.timestamp < sixMonthsAgo:

@@ -8,7 +8,7 @@ https://github.com/Carter4242
 """
 
 
-from datetime import datetime, date
+from datetime import datetime
 
 
 def writeToFile(petitions: list) -> None:
@@ -22,7 +22,7 @@ def writeToFile(petitions: list) -> None:
     """
 
     # YYYY-MM-DD HR:MM:SS:DECMAL
-    filename = "output/" + str(datetime.now()) + " - Length: " + str(len(petitions)) + ".txt"
+    filename = "output/" + str(datetime.utcnow()) + " - Length: " + str(len(petitions)) + ".txt"
 
     print("\nOpening "+filename)
     with open(filename, 'a') as f:  # Appending
@@ -52,7 +52,7 @@ def totalSigsWrite(petitions: list) -> None:
 
     lastLine = lastLine.split()  # Split by the one space character.
 
-    if lastLine[0] != str(date.today()):  # Is the day today?
+    if lastLine[0] != str(datetime.utcnow().date()):  # Is the day today?
         print("Printing Today's Total Sigs\n")
         totalSigs = 0
         for p in petitions:
@@ -60,4 +60,4 @@ def totalSigsWrite(petitions: list) -> None:
         
         with open('dailySignatures/signatureTotals.txt', 'a') as f:  # Appending
             f.write('\n')
-            f.write(str(date.today()) + ' ' + str(totalSigs))
+            f.write(str(datetime.utcnow().date()) + ' ' + str(totalSigs))
