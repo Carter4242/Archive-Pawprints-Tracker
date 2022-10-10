@@ -90,7 +90,7 @@ def buildGraphs(petitions: list) -> None:
     plt.bar(xValues, yValuesSigsOverNotCharged, 0.8, color = ['#FF0000'], label='Not Responded ≥ 200 Signatures + Not Charged')
     plt.bar(xValues, yValuesSigsOverCharged, 0.8, bottom=yValuesSigsOverNotCharged, color = ['#FF8000'], label='Not Responded ≥ 200 Signatures + Charged')
     plt.bar(xValues, yValuesResponded, 0.8, bottom=xRespondedList, color = ['#00E600'], label='Responded')
-    plt.bar(xValues, yValuesIgnored, 0.8, bottom=xIgnoreList, color = ['#511717'], label='Not Responded < 200 Signatures')
+    plt.bar(xValues, yValuesIgnored, 0.8, bottom=xIgnoreList, color = ['#4E2C2C'], label='Not Responded < 200 Signatures')
 
     plt.ylabel("Signatures")
     plt.legend()
@@ -114,7 +114,7 @@ def buildGraphs(petitions: list) -> None:
     plt.figure(figsize=(12, 9), dpi=80)
     plt.bar(xValues, yValuesSigsOver, 0.8, color = ['#FF0000'], label='Not Responded ≥ 200 Signatures')
     plt.bar(xValues, yValuesResponded, 0.8, bottom=yValuesSigsOver, color = ['#00E600'], label='Responded')
-    plt.bar(xValues, yValuesIgnored, 0.8, bottom=xIgnoreList, color = ['#511717'], label='Not Responded < 200 Signatures')
+    plt.bar(xValues, yValuesIgnored, 0.8, bottom=xIgnoreList, color = ['#4E2C2C'], label='Not Responded < 200 Signatures')
 
     plt.ylabel("Signatures")
     plt.legend()
@@ -144,8 +144,9 @@ def buildGraphs(petitions: list) -> None:
         for x in xValues:
             yValues.append(tagsDict[x][i])
         plt.figure(figsize=(12, 9), dpi=80)
-        plt.bar(xValues, yValues, 0.8, color = ['green'])
+        plt.bar(xValues, yValues, 0.8, color = ['#4E2C2C'])
         plt.ylabel("Signatures")
+        plt.axis.TickLabelFormat = '%d'
         plt.xticks(fontsize=8)
         plt.xticks(rotation = 90)
         plt.margins(0.005, tight=True)
