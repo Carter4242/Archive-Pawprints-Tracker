@@ -20,10 +20,7 @@ def buildGraphs(petitions: list) -> None:
     :rtype: None
     """   
 
-    yearMonthsList = []
-    for p in petitions:
-        dateStr = str(p.timestamp.month) + r"/" + str(p.timestamp.year)
-        yearMonthsList.append(dateStr)
+ 
 
     xValues = []
 
@@ -47,20 +44,18 @@ def buildGraphs(petitions: list) -> None:
                 dateStr = str(m) + r"/" + str(petitions[-1].timestamp.year)
                 xValues.append(dateStr)
     
-    yValues = []
-    yValuesIgnored = []
-    yValuesResponded = []
-    yValuesSigsOverCharged = []
-    yValuesSigsOverNotCharged = []
-    lIgnored = 0
-    lResponded = 0
-    lSigsOverCharged = 0
-    lSigsNotOverCharged = 0
+
+    yearMonthsList = []
+    for p in petitions:
+        dateStr = str(p.timestamp.month) + r"/" + str(p.timestamp.year)
+        yearMonthsList.append(dateStr)
+
+    yValuesIgnored, yValuesResponded, yValuesSigsOverCharged, yValuesSigsOverNotCharged = [], [], [], []
+    lIgnored, lResponded, lSigsOverCharged, lSigsNotOverCharged = 0, 0, 0, 0
     lCountUp = -1
     lCountDown = 0
     for x in xValues:
         countPetitions = yearMonthsList.count(x)
-        yValues.append(countPetitions)
         lCountDown = countPetitions
         lCountUp += countPetitions
         for i in range(lCountDown):
@@ -74,19 +69,12 @@ def buildGraphs(petitions: list) -> None:
                     lIgnored += 1
             else:
                 lResponded += 1
+
         yValuesIgnored.append(lIgnored)
         yValuesResponded.append(lResponded)
         yValuesSigsOverCharged.append(lSigsOverCharged)
         yValuesSigsOverNotCharged.append(lSigsNotOverCharged)
-        lIgnored = 0
-        lResponded = 0
-        lSigsOverCharged = 0
-        lSigsNotOverCharged = 0
-
-    xAxis = []
-
-    for i in range (1, len(xValues)+1):
-        xAxis.append(i)
+        lIgnored, lResponded, lSigsOverCharged, lSigsNotOverCharged = 0, 0, 0, 0
     
     xRespondedList = []
     for i in range(len(yValuesSigsOverCharged)):
@@ -113,6 +101,8 @@ def buildGraphs(petitions: list) -> None:
     plt.tight_layout(pad=0.5)
 
     plt.savefig('graphs/petitionsBarGraphDetailed.svg')
+    plt.close()
+
 
 
     yValuesSigsOver = []
@@ -135,4 +125,46 @@ def buildGraphs(petitions: list) -> None:
     plt.tight_layout(pad=0.5)
 
     plt.savefig('graphs/petitionsBarGraph.svg')
+    plt.close()
+
+
+
+    """# Tags
+    tagsList = []
+    for i in range(13):
+        tagsList.append([])
+    print(tagsList)
+    for l in tagsList:
+        for x in xValues:
+            l.append([0])
+    print(tagsList)"""
+
+
+    tagsDict = {}
+    for x in xValues:
+        tagsDict[x] = [0,0,0,0,0,0,0,0,0,0,0,0,0]
+    
+    for i in range(len(yearMonthsList)):
+        for t in petitions[i].tags:
+            tagsDict[yearMonthsList[i]][t.id] += 1
+
+    tagsList = ['Technology', 'Academics', 'Parking_Transportation', 'Other', 'Dining', 'Sustainability', 'Facilities', 'Housing', 'Public_Safety', 'Campus_Life', 'Governance', 'Clubs_Organizations', 'Deaf_Advocacy']
+    for i in range(13):
+        yValues = []
+        for x in xValues:
+            yValues.append(tagsDict[x][i])
+        plt.figure(figsize=(12, 9), dpi=80)
+        plt.bar(xValues, yValues, 0.8, color = ['#FF0000'], label='Not Responded ≥ 200 Signatures')
+        plt.ylabel("Signatures")
+        plt.legend()
+        plt.xticks(fontsize=8)
+        plt.xticks(rotation = 90)
+        plt.margins(0.005, tight=True)
+        plt.tight_layout(pad=0.5)
+        plt.savefig('graphs/petitionsBarGraph_' + tagsList[i] + '.svg')
+        plt.close()
+
+        
+    
+
     

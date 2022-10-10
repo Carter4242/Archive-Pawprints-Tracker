@@ -25,8 +25,9 @@ class Petition:
     expires: date - the day M/D/Y the petition expired
     title: str - the title of the petition
     author: str - the author of the petition
-    # tags: str - the tags of the petition (NOT CURRENTLY RECORDED)
+    tags: str - the tags of the petition
     """
+
     id: int
     signatures: int
     response: bool
@@ -36,7 +37,33 @@ class Petition:
     expires: date
     title: str
     author: str
-    # tags: str
+    tags: str
+
+@dataclass
+class Tag:
+    """
+    name: str - name of tag (e.g. - Dining)
+    id: int - id number of tag, unique to tag
+
+    All tags as of 10/10/22 in order of id:
+    Tag(id=0, name='Technology')
+    Tag(id=1, name='Academics')
+    Tag(id=2, name='Parking & Transportation')
+    Tag(id=3, name='Other')
+    Tag(id=4, name='Dining')
+    Tag(id=5, name='Sustainability')
+    Tag(id=6, name='Facilities')
+    Tag(id=7, name='Housing')
+    Tag(id=8, name='Public Safety')
+    Tag(id=9, name='Campus Life')
+    Tag(id=10, name='Governance')
+    Tag(id=11, name='Clubs & Organizations')
+    Tag(id=12, name='Deaf Advocacy')
+    """
+
+    id: int
+    name: str
+
 
 
 def formatPetitions(result: str) -> list:
@@ -65,6 +92,12 @@ def formatPetitions(result: str) -> list:
         expired = datetime.date(datetime.strptime(i['expires'],'%B %d, %Y'))
         updated = False  # Default, changed if it has been
         responded = bool(i['response'])  # Default, changed to true if there is an update, but no response.
+        tagList = []
+        for t in i['tags']:
+            tagList.append(Tag(
+                id=int(t['id']),
+                name=str(t['name'])
+            ))
         if i['updates'] != []:
             updated = True
             responded = True  # If the petition has received an update, than there has a been a response of some kind.
@@ -78,7 +111,7 @@ def formatPetitions(result: str) -> list:
             expires= expired,  # str -> datetime.date (above)
             title=i["title"],  # str
             author=i['author'],  # str
-            # tags=i['tags'],  # str
+            tags=tagList,  # str
             ))
 
     print("Finished Loading Petitions List")
