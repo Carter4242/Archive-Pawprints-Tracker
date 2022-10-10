@@ -11,14 +11,15 @@ https://github.com/Carter4242
 import matplotlib.pyplot as plt
 
 
-def buildTimeGraph(petitions: list) -> None:
+def buildGraphs(petitions: list) -> None:
     """
     Bit of a mess right now, will sort out later.
 
     :param petitions: Full list of petitions
     :type petitions: list
     :rtype: None
-    """    
+    """   
+
     yearMonthsList = []
     for p in petitions:
         dateStr = str(p.timestamp.month) + r"/" + str(p.timestamp.year)
@@ -97,7 +98,7 @@ def buildTimeGraph(petitions: list) -> None:
 
 
     plt.figure(figsize=(12, 9), dpi=80)
-    plt.bar(xValues, yValuesSigsOverNotCharged, 0.8, color = ['red'], label='Not Responded ≥ 200 Signatures + Not Charged')
+    plt.bar(xValues, yValuesSigsOverNotCharged, 0.8, color = ['#FF0000'], label='Not Responded ≥ 200 Signatures + Not Charged')
     plt.bar(xValues, yValuesSigsOverCharged, 0.8, bottom=yValuesSigsOverNotCharged, color = ['orange'], label='Not Responded ≥ 200 Signatures + Charged')
     plt.bar(xValues, yValuesResponded, 0.8, bottom=xRespondedList, color = ['green'], label='Responded')
     plt.bar(xValues, yValuesIgnored, 0.8, bottom=xIgnoreList, color = ['brown'], label='Not Responded < 200 Signatures')
@@ -111,14 +112,27 @@ def buildTimeGraph(petitions: list) -> None:
     plt.margins(0.005, tight=True)
     plt.tight_layout(pad=0.5)
 
+    plt.savefig('graphs/petitionsBarGraphDetailed.svg')
 
-    plt.savefig('graphs/petitionsGraph.svg')
 
-    """plt.bar(xAxis, yValues, tick_label = xValues, width = 0.8)
+    yValuesSigsOver = []
+    for i in range(len(yValuesSigsOverCharged)):
+        yValuesSigsOver.append(yValuesSigsOverCharged[i] + yValuesSigsOverNotCharged[i])
+
+
+    plt.figure(figsize=(12, 9), dpi=80)
+    plt.bar(xValues, yValuesSigsOver, 0.8, color = ['#FF0000'], label='Not Responded ≥ 200 Signatures')
+    plt.bar(xValues, yValuesResponded, 0.8, bottom=yValuesSigsOver, color = ['green'], label='Responded')
+    plt.bar(xValues, yValuesIgnored, 0.8, bottom=xIgnoreList, color = ['brown'], label='Not Responded < 200 Signatures')
+
+    plt.ylabel("Signatures")
+    plt.legend()
+
     plt.xticks(fontsize=8)
     plt.xticks(rotation = 90)
 
     plt.margins(0.005, tight=True)
     plt.tight_layout(pad=0.5)
 
-    plt.show()"""
+    plt.savefig('graphs/petitionsBarGraph.svg')
+    

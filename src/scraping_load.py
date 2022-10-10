@@ -54,6 +54,7 @@ def scrapeAll () -> list:
     ws.recv()  # paginate
     print("Receiving all")
     result = ws.recv()  # all
+    ws.close()
 
     # Format data and then return the completed list.
     return scraping_format.formatPetitions(result)
