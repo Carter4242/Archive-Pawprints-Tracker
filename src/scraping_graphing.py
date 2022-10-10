@@ -85,6 +85,7 @@ def buildGraphs(petitions: list) -> None:
         xIgnoreList.append(yValuesSigsOverCharged[i] + yValuesResponded[i] + yValuesSigsOverNotCharged[i])
 
 
+    print("\nGraphing Detailed")
     plt.figure(figsize=(12, 9), dpi=80)
     plt.bar(xValues, yValuesSigsOverNotCharged, 0.8, color = ['#FF0000'], label='Not Responded ≥ 200 Signatures + Not Charged')
     plt.bar(xValues, yValuesSigsOverCharged, 0.8, bottom=yValuesSigsOverNotCharged, color = ['#FF8000'], label='Not Responded ≥ 200 Signatures + Charged')
@@ -109,7 +110,7 @@ def buildGraphs(petitions: list) -> None:
     for i in range(len(yValuesSigsOverCharged)):
         yValuesSigsOver.append(yValuesSigsOverCharged[i] + yValuesSigsOverNotCharged[i])
 
-
+    print("Graphing Regular\n")
     plt.figure(figsize=(12, 9), dpi=80)
     plt.bar(xValues, yValuesSigsOver, 0.8, color = ['#FF0000'], label='Not Responded ≥ 200 Signatures')
     plt.bar(xValues, yValuesResponded, 0.8, bottom=yValuesSigsOver, color = ['#00E600'], label='Responded')
@@ -128,18 +129,6 @@ def buildGraphs(petitions: list) -> None:
     plt.close()
 
 
-
-    """# Tags
-    tagsList = []
-    for i in range(13):
-        tagsList.append([])
-    print(tagsList)
-    for l in tagsList:
-        for x in xValues:
-            l.append([0])
-    print(tagsList)"""
-
-
     tagsDict = {}
     for x in xValues:
         tagsDict[x] = [0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -150,13 +139,13 @@ def buildGraphs(petitions: list) -> None:
 
     tagsList = ['Technology', 'Academics', 'Parking_Transportation', 'Other', 'Dining', 'Sustainability', 'Facilities', 'Housing', 'Public_Safety', 'Campus_Life', 'Governance', 'Clubs_Organizations', 'Deaf_Advocacy']
     for i in range(13):
+        print('Graphing ' + tagsList[i])
         yValues = []
         for x in xValues:
             yValues.append(tagsDict[x][i])
         plt.figure(figsize=(12, 9), dpi=80)
-        plt.bar(xValues, yValues, 0.8, color = ['#FF0000'], label='Not Responded ≥ 200 Signatures')
+        plt.bar(xValues, yValues, 0.8, color = ['green'])
         plt.ylabel("Signatures")
-        plt.legend()
         plt.xticks(fontsize=8)
         plt.xticks(rotation = 90)
         plt.margins(0.005, tight=True)
