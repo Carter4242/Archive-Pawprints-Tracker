@@ -33,10 +33,12 @@ def main() -> None:
     print("Most frequent author:", scraping_info.mostFrequentAuthor(petitions))
     scraping_info.noResponseSixMonths(petitions)  # No response within six months > 200 sigs
 
-    scraping_graphing.buildGraphs(petitions)  # Graph by time
+    scraping_graphing.buildBarGraphs(petitions)  # Bar Graphs
 
     scraping_write.writeToFile(petitions)  # Write full list to file
     scraping_write.totalSigsWrite(petitions)  # If new day write totalSigs to file
+
+    scraping_graphing.buildLineGraphs(petitions)  # Graph by line
 
 
 if __name__ == '__main__':

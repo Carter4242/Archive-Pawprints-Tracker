@@ -11,16 +11,14 @@ https://github.com/Carter4242
 import matplotlib.pyplot as plt
 
 
-def buildGraphs(petitions: list) -> None:
+def buildBarGraphs(petitions: list) -> None:
     """
     Bit of a mess right now, will sort out later.
 
     :param petitions: Full list of petitions
     :type petitions: list
     :rtype: None
-    """   
-
- 
+    """
 
     xValues = []
 
@@ -101,7 +99,7 @@ def buildGraphs(petitions: list) -> None:
     plt.margins(0.005, tight=True)
     plt.tight_layout(pad=0.5)
 
-    plt.savefig('graphs/petitionsBarGraphDetailed.svg')
+    plt.savefig('graphs/petitionsBarGraph_Detailed.svg')
     plt.close()
 
 
@@ -125,7 +123,7 @@ def buildGraphs(petitions: list) -> None:
     plt.margins(0.005, tight=True)
     plt.tight_layout(pad=0.5)
 
-    plt.savefig('graphs/petitionsBarGraph.svg')
+    plt.savefig('graphs/petitionsBarGraph_Regular.svg')
     plt.close()
 
 
@@ -153,8 +151,36 @@ def buildGraphs(petitions: list) -> None:
         plt.tight_layout(pad=0.5)
         plt.savefig('graphs/petitionsBarGraph_' + tagsList[i] + '.svg')
         plt.close()
-
-        
     
+def buildLineGraphs(petitions: list) -> None:
+    """
+    Bit of a mess right now, will sort out later.
 
+    :param petitions: Full list of petitions
+    :type petitions: list
+    :rtype: None
+    """
+
+    print("Graphing Total Signatures\n")
+
+    startingTotal = 0
+    with open('dailySignatures/signatureTotals.txt', 'r') as f:
+        startingTotal = int(f.readline().split()[1])
     
+    totalSigsY = []
+    datesX = []
+    with open('dailySignatures/signatureTotals.txt', 'r') as f:
+        for line in f:
+            data = line.split()
+            datesX.append(data[0])
+            totalSigsY.append(int(data[1])-startingTotal)
+    plt.figure(figsize=(12, 9), dpi=80)
+    plt.plot(datesX, totalSigsY)
+    plt.ylabel("Signatures")
+    plt.axis.TickLabelFormat = '%d'
+    plt.xticks(fontsize=8)
+    plt.xticks(rotation = 90)
+    plt.margins(0.005, tight=True)
+    plt.tight_layout(pad=0.5)
+    plt.savefig('graphs/petitionsLineGraph_totalSigs.svg')
+    plt.close()
