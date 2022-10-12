@@ -13,6 +13,8 @@ import scraping_write
 import scraping_graphing
 import scraping_load
 import scraping_info
+import sys
+from sys import platform
 
 
 def main() -> None:
@@ -23,7 +25,13 @@ def main() -> None:
 
     :rtype: None
     """
+    exit = 0
     
+
+    exit = 42
+    
+    sys.exit(exit)
+
     petitions = scraping_load.scrapeAll()  # Load all data
 
     print("\nSorting...")
@@ -39,6 +47,8 @@ def main() -> None:
     scraping_write.totalSigsWrite(petitions)  # If new day write totalSigs to file
 
     scraping_graphing.buildLineGraphs(petitions)  # Graph by line
+
+
 
 
 if __name__ == '__main__':
