@@ -27,8 +27,9 @@ def main() -> None:
     """
     exit = 0
     
-
-    exit = 42
+    print("Platform is: " + platform)
+    if platform == "darwin":
+        exit = 42
     
     sys.exit(exit)
 
