@@ -152,7 +152,7 @@ def buildBarGraphs(petitions: list) -> None:
         plt.savefig('graphs/petitionsBarGraph_' + tagsList[i] + '.svg')
         plt.close()
     
-def buildLineGraphs(petitions: list) -> None:
+def buildLineGraphs() -> None:
     """
     Bit of a mess right now, will sort out later.
 

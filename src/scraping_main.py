@@ -25,13 +25,12 @@ def main() -> None:
 
     :rtype: None
     """
-    exit = 0
-    
+
+    exitCode = 0
     print("Platform is: " + platform)
     if platform == "darwin":
-        exit = 42
+        exitCode = 42
     
-    sys.exit(exit)
 
     petitions = scraping_load.scrapeAll()  # Load all data
 
@@ -39,15 +38,20 @@ def main() -> None:
     petitions = scraping_info.sortPetitions(petitions, 'signatures')
     petitions = scraping_info.sortPetitions(petitions, 'response')
     petitions = scraping_info.sortPetitions(petitions, 'timestamp')
-    print("Most frequent author:", scraping_info.mostFrequentAuthor(petitions))
-    scraping_info.noResponseSixMonths(petitions)  # No response within six months > 200 sigs
+    # print("Most frequent author:", scraping_info.mostFrequentAuthor(petitions))
+    # scraping_info.noResponseSixMonths(petitions)  # No response within six months > 200 sigs
 
     scraping_graphing.buildBarGraphs(petitions)  # Bar Graphs
 
-    scraping_write.writeToFile(petitions)  # Write full list to file
-    scraping_write.totalSigsWrite(petitions)  # If new day write totalSigs to file
+    if exitCode != 42:
+        scraping_write.writeToFile(petitions)  # Write full list to file
+        scraping_write.totalSigsWrite(petitions)  # If new day write totalSigs to file
+    else:
+        print("ERROR: RUNNING ON LOCAL")
 
-    scraping_graphing.buildLineGraphs(petitions)  # Graph by line
+    scraping_graphing.buildLineGraphs()  # Graph by line
+
+    sys.exit(exitCode)
 
 
 
