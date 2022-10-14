@@ -9,7 +9,7 @@ https://github.com/Carter4242
 
 
 from websocket import create_connection
-import scraping_format
+import format
 import json
 
 
@@ -57,4 +57,4 @@ def scrapeAll () -> list:
     ws.close()
 
     # Format data and then return the completed list.
-    return scraping_format.formatPetitions(result)
+    return format.formatPetitions(result)

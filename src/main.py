@@ -9,10 +9,10 @@ https://github.com/Carter4242
 """
 
 
-import scraping_write
-import scraping_graphing
-import scraping_load
-import scraping_info
+import write
+import graphing
+import load
+import info
 import sys
 from sys import platform
 
@@ -32,24 +32,27 @@ def main() -> None:
         exitCode = 42
     
 
-    petitions = scraping_load.scrapeAll()  # Load all data
+    petitions = load.scrapeAll()  # Load all data
 
     print("\nSorting...")
-    petitions = scraping_info.sortPetitions(petitions, 'signatures')
-    petitions = scraping_info.sortPetitions(petitions, 'response')
-    petitions = scraping_info.sortPetitions(petitions, 'timestamp')
+    petitions = info.sortPetitions(petitions, 'signatures')
+    petitions = info.sortPetitions(petitions, 'response')
+    petitions = info.sortPetitions(petitions, 'timestamp')
     # print("Most frequent author:", scraping_info.mostFrequentAuthor(petitions))
     # scraping_info.noResponseSixMonths(petitions)  # No response within six months > 200 sigs
 
-    scraping_graphing.buildBarGraphs(petitions)  # Bar Graphs
+    graphing.buildBarGraphs(petitions)  # Bar Graphs
 
+    write.writeToFile(petitions)  # Write full list to file
     if exitCode != 42:
-        scraping_write.writeToFile(petitions)  # Write full list to file
-        scraping_write.totalSigsWrite(petitions)  # If new day write totalSigs to file
+        write.totalSigsWrite(petitions)  # If new day write totalSigs to file
     else:
-        print("ERROR: RUNNING ON LOCAL")
+        print("")
+        for i in range(8):
+            print("ERROR: WILL NOT WRITE - RUNNING ON LOCAL")
+        print("")
 
-    scraping_graphing.buildLineGraphs()  # Graph by line
+    graphing.buildLineGraphs()  # Graph by line
 
     sys.exit(exitCode)
 

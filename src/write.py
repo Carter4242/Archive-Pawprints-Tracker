@@ -33,6 +33,8 @@ def writeToFile(petitions: list) -> None:
 
     print(filename +" written\n")
 
+    currentPetitions = list(filter(lambda x: (x.expires), petitions)) 
+
 
 def totalSigsWrite(petitions: list) -> None:
     """
@@ -53,7 +55,7 @@ def totalSigsWrite(petitions: list) -> None:
     lastLine = lastLine.split()  # Split by the one space character.
 
     if lastLine[0] != str(datetime.utcnow().date()):  # Is the day today?
-        print("Printing Today's Total Sigs\n")
+        print("Writing today's total sigs\n")
         totalSigs = 0
         for p in petitions:
             totalSigs += p.signatures
@@ -61,3 +63,4 @@ def totalSigsWrite(petitions: list) -> None:
         with open('dailySignatures/signatureTotals.txt', 'a') as f:  # Appending
             f.write('\n')
             f.write(str(datetime.utcnow().date()) + ' ' + str(totalSigs))
+
