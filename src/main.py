@@ -50,7 +50,7 @@ def main() -> None:
         print("")
         for i in range(8):
             print("ERROR: WILL NOT WRITE - RUNNING ON LOCAL")
-        print("")
+        print("\n")
 
     graphing.buildLineGraphs()  # Graph by line
 

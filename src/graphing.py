@@ -99,7 +99,7 @@ def buildBarGraphs(petitions: list) -> None:
     plt.margins(0.005, tight=True)
     plt.tight_layout(pad=0.5)
 
-    plt.savefig('totalGraphs/petitionsBarGraph_Detailed.svg')
+    plt.savefig('fullGraphs/petitionsBarGraph_Detailed.svg')
     plt.close()
 
 
@@ -123,7 +123,7 @@ def buildBarGraphs(petitions: list) -> None:
     plt.margins(0.005, tight=True)
     plt.tight_layout(pad=0.5)
 
-    plt.savefig('totalGraphs/petitionsBarGraph_Regular.svg')
+    plt.savefig('fullGraphs/petitionsBarGraph_Regular.svg')
     plt.close()
 
 
@@ -149,7 +149,7 @@ def buildBarGraphs(petitions: list) -> None:
         plt.xticks(rotation = 90)
         plt.margins(0.005, tight=True)
         plt.tight_layout(pad=0.5)
-        plt.savefig('totalGraphs/petitionsBarGraph_' + tagsList[i] + '.svg')
+        plt.savefig('fullGraphs/petitionsBarGraph_' + tagsList[i] + '.svg')
         plt.close()
     
 def buildLineGraphs() -> None:
@@ -182,5 +182,5 @@ def buildLineGraphs() -> None:
     plt.xticks(rotation = 90)
     plt.margins(0.005, tight=True)
     plt.tight_layout(pad=0.5)
-    plt.savefig('totalGraphs/petitionsLineGraph_totalSigs.svg')
+    plt.savefig('fullGraphs/petitionsLineGraph_totalSigs.svg')
     plt.close()
