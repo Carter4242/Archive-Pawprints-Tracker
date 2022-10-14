@@ -7,10 +7,13 @@ Author: Carter4242
 https://github.com/Carter4242
 """
 
-
+from dateutil.relativedelta import relativedelta
 from datetime import datetime, date
+from pytz import timezone
 from dataclasses import dataclass
 import json
+
+from matplotlib.colors import ListedColormap
 
 
 @dataclass
@@ -65,7 +68,6 @@ class Tag:
     name: str
 
 
-
 def formatPetitions(result: str) -> list:
     """
     Formats the result of the all command. First into a json. Then into a list.
@@ -118,3 +120,13 @@ def formatPetitions(result: str) -> list:
     print("Length of petitions: " + str(len(petitions)))  # This better match the length of data.
 
     return petitions
+
+
+def latestPetitions(petitions : list) -> list:
+    tz = timezone('EST')
+    now = datetime.now(tz).date()
+    
+    expired = (now - relativedelta(months=+1))
+    print("Today is hopefully:", now)
+    print("Expired if after:", expired, )
+    return list(filter(lambda x: x.timestamp > expired, petitions))

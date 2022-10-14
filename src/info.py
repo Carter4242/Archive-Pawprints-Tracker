@@ -11,6 +11,7 @@ https://github.com/Carter4242
 
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
+from pytz import timezone
 
 
 def mostFrequentAuthor(petitions: list) -> str:
@@ -70,8 +71,11 @@ def noResponseSixMonths(petitions: list) -> list:
     :return: List of petitions with no response, over 200 sigs, from at least six months ago.
     :rtype: list
     """
-
-    sixMonthsAgo = datetime.utcnow().date() - relativedelta(months=+6)
+    
+    tz = timezone('EST')
+    now = datetime.now(tz).date()
+    sixMonthsAgo = now - relativedelta(months=+6)
+    
     noResponse = []
     for i in petitions:
         if i.response == False and i.signatures >= 200 and i.timestamp < sixMonthsAgo:

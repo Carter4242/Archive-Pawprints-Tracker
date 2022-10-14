@@ -9,11 +9,13 @@ https://github.com/Carter4242
 """
 
 
-import write
+import format
 import graphing
-import load
 import info
+import load
+import write
 import sys
+import os
 from sys import platform
 
 
@@ -38,13 +40,18 @@ def main() -> None:
     petitions = info.sortPetitions(petitions, 'signatures')
     petitions = info.sortPetitions(petitions, 'response')
     petitions = info.sortPetitions(petitions, 'timestamp')
+    latestPetitions = format.latestPetitions(petitions)
+
     # print("Most frequent author:", scraping_info.mostFrequentAuthor(petitions))
     # scraping_info.noResponseSixMonths(petitions)  # No response within six months > 200 sigs
 
     graphing.buildBarGraphs(petitions)  # Bar Graphs
 
     write.writeToFile(petitions)  # Write full list to file
+    write.petitionsWrite(latestPetitions)
+
     if exitCode != 42:
+        #write.petitionsWrite(latestPetitions)  # If new day write every petition to there file
         write.totalSigsWrite(petitions)  # If new day write totalSigs to file
     else:
         print("")
@@ -52,6 +59,7 @@ def main() -> None:
             print("ERROR: WILL NOT WRITE - RUNNING ON LOCAL")
         print("\n")
 
+    #graphing.buildPetitionsGraphs
     graphing.buildLineGraphs()  # Graph by line
 
     sys.exit(exitCode)

@@ -9,6 +9,8 @@ https://github.com/Carter4242
 
 
 from datetime import datetime
+from pytz import timezone
+import os
 
 
 def writeToFile(petitions: list) -> None:
@@ -21,8 +23,11 @@ def writeToFile(petitions: list) -> None:
     :rtype: None
     """
 
+    tz = timezone('EST')
+    now = datetime.now(tz)
+
     # YYYY-MM-DD HR:MM:SS:DECMAL
-    filename = "output/" + str(datetime.utcnow()) + " - Length: " + str(len(petitions)) + ".txt"
+    filename = "output/" + str(now) + " - Length: " + str(len(petitions)) + ".txt"
 
     print("\nOpening "+filename)
     with open(filename, 'a') as f:  # Appending
@@ -47,6 +52,10 @@ def totalSigsWrite(petitions: list) -> None:
     :type petitions: list
     :rtype: None
     """
+
+    tz = timezone('EST')
+    now = datetime.now(tz).date()
+
     lastLine = ""
     with open('dailySignatures/signatureTotals.txt', 'r') as f:  # Reading contents
         for line in f:
@@ -54,7 +63,7 @@ def totalSigsWrite(petitions: list) -> None:
 
     lastLine = lastLine.split()  # Split by the one space character.
 
-    if lastLine[0] != str(datetime.utcnow().date()):  # Is the day today?
+    if lastLine[0] != str(now):  # Is the day today?
         print("Writing today's total sigs\n")
         totalSigs = 0
         for p in petitions:
@@ -62,5 +71,38 @@ def totalSigsWrite(petitions: list) -> None:
         
         with open('dailySignatures/signatureTotals.txt', 'a') as f:  # Appending
             f.write('\n')
-            f.write(str(datetime.utcnow().date()) + ' ' + str(totalSigs))
+            f.write(str(now) + ' ' + str(totalSigs))
 
+
+def petitionsWrite(petitionsLatest: list):
+    tz = timezone('EST')
+    now = datetime.now(tz).date()
+    print("Today is hopefully:", now)
+    currentFolder = os.getcwd()+"/petitions/current"
+    historicalFolder = os.getcwd()+"/petitions/historical"
+    currentFiles = os.listdir(currentFolder)
+    #historicalFiles = os.listdir(historicalFolder)
+    #print("HISTORICAL:", historicalFiles)
+    
+
+    for p in petitionsLatest:
+        pFilename = str(p.expires) + " " + str(p.id) + " " + p.title + ".txt"
+        filename = 'petitions/current/'+ pFilename
+        if pFilename not in currentFiles:
+            print(pFilename)
+            with open(filename, 'w') as f:
+                f.write(now.strftime('%m/%d/%Y') + " " + str(p.signatures))
+        else:
+            with open(filename, 'a') as f:
+                f.write("\n" + now.strftime('%m/%d') + " " + str(p.signatures))
+    
+    currentFiles = os.listdir(currentFolder)
+   
+    for f in currentFiles:
+        line = f.split()
+        pExpire = datetime.strptime(line[0], '%Y-%m-%d').date()
+        if pExpire < now:
+            currentLocation = currentFolder + "/" + f
+            newLocation = historicalFolder + "/" + f
+            os.rename(currentLocation, newLocation)
+            #GRAPH HISTORICAL FOR FINAL TIME, DELETE OLD GRAPH
