@@ -8,7 +8,9 @@ https://github.com/Carter4242
 """
 
 
-import matplotlib.pyplot as plt
+from format import Petition  # Dataclass for type hint
+import matplotlib.pyplot as plt  # Graphing
+import os  # Getting file names
 
 
 def buildBarGraphs(petitions: list) -> None:
@@ -99,7 +101,7 @@ def buildBarGraphs(petitions: list) -> None:
     plt.margins(0.005, tight=True)
     plt.tight_layout(pad=0.5)
 
-    plt.savefig('fullGraphs/petitionsBarGraph_Detailed.svg')
+    plt.savefig('graphsFull/BarGraph_Detailed.svg')
     plt.close()
 
 
@@ -123,7 +125,7 @@ def buildBarGraphs(petitions: list) -> None:
     plt.margins(0.005, tight=True)
     plt.tight_layout(pad=0.5)
 
-    plt.savefig('fullGraphs/petitionsBarGraph_Regular.svg')
+    plt.savefig('graphsFull/BarGraph_Regular.svg')
     plt.close()
 
 
@@ -149,9 +151,10 @@ def buildBarGraphs(petitions: list) -> None:
         plt.xticks(rotation = 90)
         plt.margins(0.005, tight=True)
         plt.tight_layout(pad=0.5)
-        plt.savefig('fullGraphs/petitionsBarGraph_' + tagsList[i] + '.svg')
+        plt.savefig('graphsFull/BarGraph_' + tagsList[i] + '.svg')
         plt.close()
     
+
 def buildLineGraphs() -> None:
     """
     Bit of a mess right now, will sort out later.
@@ -182,5 +185,27 @@ def buildLineGraphs() -> None:
     plt.xticks(rotation = 90)
     plt.margins(0.005, tight=True)
     plt.tight_layout(pad=0.5)
-    plt.savefig('fullGraphs/petitionsLineGraph_totalSigs.svg')
+    plt.savefig('graphsFull/LineGraph_totalSigs.svg')
+    plt.close()
+
+def buildPetitionGraph(filename: str) -> None:
+    datesX = []
+    sigsY = []
+    dataAndID = filename.split()
+    print("Graphing", dataAndID[1])
+    with open(filename, 'r') as f:
+        for line in f:
+            l = line.split()
+            datesX.append(l[0])
+            sigsY.append(l[1])
+    
+    plt.figure(figsize=(12, 9), dpi=80)
+    plt.plot(datesX, sigsY)
+    plt.ylabel("Signatures")
+    plt.axis.TickLabelFormat = '%d'
+    plt.xticks(fontsize=8)
+    plt.xticks(rotation = 90)
+    plt.margins(0.005, tight=True)
+    plt.tight_layout(pad=0.5)
+    plt.savefig('graphsSingle/' + str(dataAndID[1]) + '.svg')
     plt.close()

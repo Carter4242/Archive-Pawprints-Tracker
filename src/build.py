@@ -10,10 +10,11 @@ https://github.com/Carter4242
 
 from datetime import datetime
 from pytz import timezone
-import os
+import graphing
+import os  # Getting file names from folders, renaming files
 
 
-def writeToFile(petitions: list) -> None:
+def all(petitions: list) -> None:
     """
     Writes the full list of petitions into a newly created file, each petition on a new line.
     Filename is - YYYY-MM-DD HR:MM:SS:DECMAL
@@ -38,10 +39,11 @@ def writeToFile(petitions: list) -> None:
 
     print(filename +" written\n")
 
-    currentPetitions = list(filter(lambda x: (x.expires), petitions)) 
+    graphing.buildBarGraphs(petitions)
 
 
-def totalSigsWrite(petitions: list) -> None:
+
+def alltime(petitions: list) -> None:
     """
     Gets the last line of signatureTotals.txt
     Splits it into date [(YYYY-MM-DD), totalSigs)] then checks if the day isn't today.
@@ -63,7 +65,7 @@ def totalSigsWrite(petitions: list) -> None:
 
     lastLine = lastLine.split()  # Split by the one space character.
 
-    if lastLine[0] != str(now):  # Is the day today?
+    if lastLine[0] != str(now):  # Is the day NOT today?
         print("Writing today's total sigs\n")
         totalSigs = 0
         for p in petitions:
@@ -72,37 +74,36 @@ def totalSigsWrite(petitions: list) -> None:
         with open('dailySignatures/signatureTotals.txt', 'a') as f:  # Appending
             f.write('\n')
             f.write(str(now) + ' ' + str(totalSigs))
+    
+    graphing.buildLineGraphs()  # Graph
 
 
-def petitionsWrite(petitionsLatest: list):
+def latest(petitionsLatest: list):
     tz = timezone('EST')
     now = datetime.now(tz).date()
     print("Today is hopefully:", now)
     currentFolder = os.getcwd()+"/petitions/current"
     historicalFolder = os.getcwd()+"/petitions/historical"
-    currentFiles = os.listdir(currentFolder)
-    #historicalFiles = os.listdir(historicalFolder)
-    #print("HISTORICAL:", historicalFiles)
-    
+    currentFiles = os.listdir(currentFolder)    
 
     for p in petitionsLatest:
-        pFilename = str(p.expires) + " " + str(p.id) + " " + p.title + ".txt"
+        pFilename = str(p.expires) + " " + str(p.id) + ".txt"
         filename = 'petitions/current/'+ pFilename
         if pFilename not in currentFiles:
-            print(pFilename)
             with open(filename, 'w') as f:
-                f.write(now.strftime('%m/%d/%Y') + " " + str(p.signatures))
+                f.write(now.strftime('%m/%d') + " " + str(p.signatures))
         else:
             with open(filename, 'a') as f:
                 f.write("\n" + now.strftime('%m/%d') + " " + str(p.signatures))
-    
+
     currentFiles = os.listdir(currentFolder)
-   
+
     for f in currentFiles:
-        line = f.split()
-        pExpire = datetime.strptime(line[0], '%Y-%m-%d').date()
+        fileDate = f.split()[0]
+        pExpire = datetime.strptime(fileDate, '%Y-%m-%d').date()
+        filename = 'petitions/current/'+ f
+        graphing.buildPetitionGraph(filename)
         if pExpire < now:
             currentLocation = currentFolder + "/" + f
             newLocation = historicalFolder + "/" + f
             os.rename(currentLocation, newLocation)
-            #GRAPH HISTORICAL FOR FINAL TIME, DELETE OLD GRAPH
