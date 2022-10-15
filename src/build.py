@@ -7,7 +7,7 @@ Author: Carter4242
 https://github.com/Carter4242
 """
 
-
+from dateutil.relativedelta import relativedelta
 from datetime import datetime
 from pytz import timezone
 import graphing
@@ -81,7 +81,7 @@ def alltime(petitions: list) -> None:
 def latest(petitionsLatest: list):
     tz = timezone('EST')
     now = datetime.now(tz).date()
-    print("Today is hopefully:", now)
+    print("\n\nToday is hopefully:\n", now)
     currentFolder = os.getcwd()+"/petitions/current"
     historicalFolder = os.getcwd()+"/petitions/historical"
     currentFiles = os.listdir(currentFolder)    
@@ -90,7 +90,9 @@ def latest(petitionsLatest: list):
         pFilename = str(p.expires) + " " + str(p.id) + ".txt"
         filename = 'petitions/current/'+ pFilename
         if pFilename not in currentFiles:
+            first = (now - relativedelta(days=+1))
             with open(filename, 'w') as f:
+                f.write(first.strftime('%m/%d') + " 0\n")
                 f.write(now.strftime('%m/%d') + " " + str(p.signatures))
         else:
             with open(filename, 'a') as f:
