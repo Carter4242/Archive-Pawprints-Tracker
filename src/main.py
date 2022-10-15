@@ -43,17 +43,15 @@ def main() -> None:
     # scraping_info.noResponseSixMonths(petitions)  # No response within six months > 200 sigs
 
     build.all(petitions)
-    build.latest(latestPetitions)
 
     if exitCode != 42:  # Github Actions only
-        #build.latest(latestPetitions)
+        build.latest(latestPetitions)
         build.alltime(petitions)
     else:
         print("")
         for i in range(8):
             print("ERROR: WILL NOT WRITE - RUNNING ON LOCAL")
         print("\n")
-
 
     exit(exitCode)
 
