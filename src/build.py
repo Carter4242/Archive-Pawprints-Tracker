@@ -103,7 +103,7 @@ def latest(petitionsLatest: list):
     for f in currentFiles:
         fileDate = f.split()[0]
         pExpire = datetime.strptime(fileDate, '%Y-%m-%d').date()
-        filename = 'petitions/current/'+ f
+        filename = 'petitions/current/'+ f[:f-4]
         graphing.buildPetitionGraph(filename)
         if pExpire < now:
             currentLocation = currentFolder + "/" + f
