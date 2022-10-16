@@ -39,7 +39,7 @@ def all(petitions: list) -> None:
 
     print(filename +" written\n")
 
-    graphing.buildBarGraphs(petitions)
+    graphing.Graphs(petitions)
 
 
 
@@ -75,7 +75,7 @@ def alltime(petitions: list) -> None:
             f.write('\n')
             f.write(str(now) + ' ' + str(totalSigs))
     
-    graphing.buildLineGraphs()  # Graph
+    graphing.buildAllTimeGraph()  # Graph
 
 
 def latest(petitionsLatest: list):

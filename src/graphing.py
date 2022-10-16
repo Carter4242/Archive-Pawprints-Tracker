@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt  # Graphing
 import os  # Getting file names
 
 
-def buildBarGraphs(petitions: list) -> None:
+def Graphs(petitions: list) -> None:
     """
     Bit of a mess right now, will sort out later.
 
@@ -92,7 +92,7 @@ def buildBarGraphs(petitions: list) -> None:
     plt.bar(xValues, yValuesResponded, 0.8, bottom=xRespondedList, color = ['#00E600'], label='Responded')
     plt.bar(xValues, yValuesIgnored, 0.8, bottom=xIgnoreList, color = ['#4E2C2C'], label='Not Responded < 200 Signatures')
 
-    plt.ylabel("Signatures")
+    plt.ylabel("Petitions")
     plt.legend()
 
     plt.xticks(fontsize=8)
@@ -105,7 +105,6 @@ def buildBarGraphs(petitions: list) -> None:
     plt.close()
 
 
-
     yValuesSigsOver = []
     for i in range(len(yValuesSigsOverCharged)):
         yValuesSigsOver.append(yValuesSigsOverCharged[i] + yValuesSigsOverNotCharged[i])
@@ -116,7 +115,7 @@ def buildBarGraphs(petitions: list) -> None:
     plt.bar(xValues, yValuesResponded, 0.8, bottom=yValuesSigsOver, color = ['#00E600'], label='Responded')
     plt.bar(xValues, yValuesIgnored, 0.8, bottom=xIgnoreList, color = ['#4E2C2C'], label='Not Responded < 200 Signatures')
 
-    plt.ylabel("Signatures")
+    plt.ylabel("Petitions")
     plt.legend()
 
     plt.xticks(fontsize=8)
@@ -145,7 +144,7 @@ def buildBarGraphs(petitions: list) -> None:
             yValues.append(tagsDict[x][i])
         plt.figure(figsize=(12, 9), dpi=80)
         plt.bar(xValues, yValues, 0.8, color = ['#4E2C2C'])
-        plt.ylabel("Signatures")
+        plt.ylabel("Petitions")
         plt.axis.TickLabelFormat = '%d'
         plt.xticks(fontsize=8)
         plt.xticks(rotation = 90)
@@ -153,9 +152,28 @@ def buildBarGraphs(petitions: list) -> None:
         plt.tight_layout(pad=0.5)
         plt.savefig('graphsFull/BarGraph_' + tagsList[i] + '.svg')
         plt.close()
+
+    print("\nGraphing Total Petitions\n")
+
+    totalPetitionsY = []
+    TotalPetitions = 0
+    for i in range(len(xValues)):
+        TotalPetitions += (yValuesSigsOver[i] + yValuesResponded[i] + yValuesIgnored[i])
+        totalPetitionsY.append(TotalPetitions)
+
+    plt.figure(figsize=(12, 9), dpi=80)
+    plt.plot(xValues, totalPetitionsY)
+    plt.ylabel("Petitions")
+    plt.axis.TickLabelFormat = '%d'
+    plt.xticks(fontsize=8)
+    plt.xticks(rotation = 90)
+    plt.margins(0.005, tight=True)
+    plt.tight_layout(pad=0.5)
+    plt.savefig('graphsFull/LineGraph_totalPetitions.svg')
+    plt.close()
     
 
-def buildLineGraphs() -> None:
+def buildAllTimeGraph() -> None:
     """
     Bit of a mess right now, will sort out later.
 
@@ -187,6 +205,7 @@ def buildLineGraphs() -> None:
     plt.tight_layout(pad=0.5)
     plt.savefig('graphsFull/LineGraph_totalSigs.svg')
     plt.close()
+
 
 def buildPetitionGraph(filename: str) -> None:
     datesX = []
