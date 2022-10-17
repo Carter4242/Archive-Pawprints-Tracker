@@ -162,7 +162,7 @@ def Graphs(petitions: list) -> None:
         totalPetitionsY.append(TotalPetitions)
 
     plt.figure(figsize=(12, 9), dpi=80)
-    plt.plot(xValues, totalPetitionsY)
+    plt.plot(xValues, totalPetitionsY, "-o")
     plt.ylabel("Petitions")
     plt.axis.TickLabelFormat = '%d'
     plt.xticks(fontsize=8)
@@ -196,7 +196,7 @@ def buildAllTimeGraph() -> None:
             datesX.append(data[0])
             totalSigsY.append(int(data[1])-startingTotal)
     plt.figure(figsize=(12, 9), dpi=80)
-    plt.plot(datesX, totalSigsY)
+    plt.plot(datesX, totalSigsY, "-o")
     plt.ylabel("Signatures")
     plt.axis.TickLabelFormat = '%d'
     plt.xticks(fontsize=8)
@@ -219,7 +219,7 @@ def buildPetitionGraph(filename: str) -> None:
             sigsY.append(l[1])
     
     plt.figure(figsize=(12, 9), dpi=80)
-    plt.plot(datesX, sigsY)
+    plt.plot(datesX, sigsY, "-o")
     plt.ylabel("Signatures")
     plt.axis.TickLabelFormat = '%d'
     plt.xticks(fontsize=8)
