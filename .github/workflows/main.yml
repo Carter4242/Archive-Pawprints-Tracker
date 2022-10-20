@@ -14,18 +14,18 @@ jobs:
 
     steps:
     # Check out repository under $GITHUB_WORKSPACE, so the job can access it
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2.5.0
 
     # Run using Python 3.10.7 for consistency
     - name: Set up Python 3.10.7
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4.3.0
       with:
         python-version: '3.10.7'
         architecture: 'x64'
 
     # Cache dependencies. From:
     # https://github.com/actions/cache/blob/master/examples.md#python---pip
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3.0.11
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
