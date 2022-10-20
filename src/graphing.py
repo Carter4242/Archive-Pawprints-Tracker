@@ -208,6 +208,15 @@ def buildAllTimeGraph() -> None:
 
 
 def buildPetitionGraph(filename: str) -> None:
+    """
+    Builds individual petition graphs.
+    For every line of the file the first item is the date/xValue and the second value is the numSigs/yValue.
+    Creates graph from those values in location graphsSingle/Petition-ID.svg
+
+    :param filename: filename in the form 'YYYY-MM-DD Petition-ID'
+    :type filename: str
+    """
+
     datesX = []
     sigsY = []
     dataAndID = filename.split()
