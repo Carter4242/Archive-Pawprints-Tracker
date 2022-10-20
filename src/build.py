@@ -92,7 +92,7 @@ def latest(petitionsLatest: list):
     :param petitionsLatest: All not expired petitions
     :type petitionsLatest: list
     """
-    
+
     tz = timezone('EST')
     now = datetime.now(tz).date()  # Date object (so just year month and day, no time)
     print("\n\nToday is hopefully:\n", now)
@@ -117,8 +117,8 @@ def latest(petitionsLatest: list):
     for f in currentFiles:
         filename = 'petitions/current/'+ f
         graphing.buildPetitionGraph(filename)  # Newly expired petitions get graphed one last time as well
-        pExpire = datetime.strptime(fileDate, '%Y-%m-%d').date()
         fileDate = f.split()[0]
+        pExpire = datetime.strptime(fileDate, '%Y-%m-%d').date()
         if pExpire < now:  # Getting rid of now expired folders
             currentLocation = currentFolder + "/" + f
             newLocation = expiredFolder + "/" + f
