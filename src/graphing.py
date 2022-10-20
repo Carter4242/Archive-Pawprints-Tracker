@@ -216,7 +216,7 @@ def buildPetitionGraph(filename: str) -> None:
         for line in f:
             l = line.split()
             datesX.append(l[0])
-            sigsY.append(l[1])
+            sigsY.append(int(l[1]))
     
     plt.figure(figsize=(12, 9), dpi=80)
     plt.plot(datesX, sigsY, "-o")
