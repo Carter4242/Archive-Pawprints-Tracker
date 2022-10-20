@@ -79,12 +79,26 @@ def alltime(petitions: list) -> None:
 
 
 def latest(petitionsLatest: list):
+    """
+    Handles the calling of the graph function for individual petitions, as well as storing petition signature data.
+
+    For every petition in the not expired petitions, if it doesn't have an existing storage file create one.
+    Then write 'yesterdays-date 0' and 'todays-date currentSigs'.
+    If the file already exists append 'todays-date currentSigs' to it's storage file.
+    The style for the storage is 'expiry-date petition-id.txt'
+    Update the currentFiles which is a list of all files in the petitions/current folder.
+    Then for every current file in the current folder, graph it, then if it has expired move it to the expired folder.
+
+    :param petitionsLatest: All not expired petitions
+    :type petitionsLatest: list
+    """
+    
     tz = timezone('EST')
-    now = datetime.now(tz).date()
+    now = datetime.now(tz).date()  # Date object (so just year month and day, no time)
     print("\n\nToday is hopefully:\n", now)
-    currentFolder = os.getcwd()+"/petitions/current"
-    historicalFolder = os.getcwd()+"/petitions/historical"
-    currentFiles = os.listdir(currentFolder)    
+    currentFolder = os.getcwd()+"/petitions/current"  # Location of currentFolder within the entire filesystem
+    expiredFolder = os.getcwd()+"/petitions/expired"  # Location of expiredFolder within the entire filesystem
+    currentFiles = os.listdir(currentFolder) # List of names of every file in currentFolder
 
     for p in petitionsLatest:
         pFilename = str(p.expires) + " " + str(p.id) + ".txt"
@@ -98,14 +112,14 @@ def latest(petitionsLatest: list):
             with open(filename, 'a') as f:
                 f.write("\n" + now.strftime('%m/%d') + " " + str(p.signatures))
 
-    currentFiles = os.listdir(currentFolder)
+    currentFiles = os.listdir(currentFolder)  # Update the list with the newly created files
 
     for f in currentFiles:
-        fileDate = f.split()[0]
-        pExpire = datetime.strptime(fileDate, '%Y-%m-%d').date()
         filename = 'petitions/current/'+ f
-        graphing.buildPetitionGraph(filename)
-        if pExpire < now:
+        graphing.buildPetitionGraph(filename)  # Newly expired petitions get graphed one last time as well
+        pExpire = datetime.strptime(fileDate, '%Y-%m-%d').date()
+        fileDate = f.split()[0]
+        if pExpire < now:  # Getting rid of now expired folders
             currentLocation = currentFolder + "/" + f
-            newLocation = historicalFolder + "/" + f
+            newLocation = expiredFolder + "/" + f
             os.rename(currentLocation, newLocation)
